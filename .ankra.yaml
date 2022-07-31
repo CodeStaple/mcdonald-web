@@ -1,0 +1,36 @@
+---
+kind: pipeline
+metadata:
+  app: mcdonald
+spec:
+  stages:
+    dev:
+      - build
+      - dry-run
+      - deploy
+
+  global_variables:
+    HELM_NAME: mcdonald
+    HELM_NAMESPACE: mcdonald
+    HELM_CHART: helm/
+    TEST_VAR: "global"
+
+  dev:
+    target:
+      match:
+        name: local
+    build:
+      build:
+        docker:
+          name: test/mcdonald-web
+          tag: latest
+      script:
+        - helm repo add ankra-test https://registry.infra.ankra.cloud/chartrepo/test --username 'robot$test' --password Hne33ZWKnRPgTiPV1HREhoVhqHWg0JDD
+        - helm repo list
+        - helm dependency update helm/
+        - helm package helm/
+        - helm cm-push helm/mcdonald-web-0.1.0.tgz ankra-test
+    dry-run:
+      script:
+        - helm -n $HELM_NAMESPACE list
+        - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run

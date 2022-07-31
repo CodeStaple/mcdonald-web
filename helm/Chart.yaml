@@ -1,0 +1,17 @@
+apiVersion: v2
+name: mcdonald
+description: A Helm chart for Mc Donalds online web store.
+type: application
+version: 0.1.0 # Chart version
+appVersion: 0.1.0 # Application version - Currently not used.
+
+maintainers:
+  - email: admin@ankra.io
+    name: Ankra AB
+
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
