@@ -20,9 +20,9 @@ spec:
         name: local
     build:
       build:
-        type: docker
-        name: test/mcdonald-web
-        tag: latest
+        - type: docker
+          name: test/mcdonald-web
+          tag: latest
       script:
         - helm repo add ankra-test https://registry.infra.ankra.cloud/chartrepo/test --username 'robot$test' --password Hne33ZWKnRPgTiPV1HREhoVhqHWg0JDD
         - helm repo list
