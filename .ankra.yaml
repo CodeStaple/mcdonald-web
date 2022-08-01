@@ -7,7 +7,6 @@ spec:
     dev:
       - build
       - dry-run
-      - deploy
 
   global_variables:
     HELM_NAME: mcdonald
