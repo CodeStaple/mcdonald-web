@@ -29,7 +29,7 @@ spec:
         - helm repo list
         - helm dependency update helm/
         - helm package helm/ --version $HELM_CHART_VERSION
-        - helm cm-push helm/mcdonald-$HELM_CHART_VERSION.tgz ankra-test
+        - helm cm-push mcdonald-$HELM_CHART_VERSION.tgz ankra-test
     dry-run:
       script:
         - helm -n $HELM_NAMESPACE list
