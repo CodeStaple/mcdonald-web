@@ -33,3 +33,4 @@ spec:
       script:
         - helm -n $HELM_NAMESPACE list
         - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run
+
