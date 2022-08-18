@@ -13,7 +13,6 @@ spec:
     HELM_NAMESPACE: mcdonald
     HELM_CHART: helm/
     HELM_CHART_VERSION: 0.1.1
-    TEST_VAR: "global"
 
   dev:
     target:
