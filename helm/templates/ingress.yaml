@@ -2,7 +2,7 @@
 {{- $fullName := include "mcdonald.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- $namespace := .Release.Namespace -}}
-{{- $environment := .Values.global.environment -}}
+{{- $environment := .Values.environment -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
