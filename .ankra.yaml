@@ -12,12 +12,13 @@ spec:
     HELM_NAME: mcdonald
     HELM_NAMESPACE: mcdonald
     HELM_CHART: helm/
+    HELM_CHART_VERSION: 0.1.1
     TEST_VAR: "global"
 
   dev:
     target:
       match:
-        name: local
+        name: dev
     build:
       build:
         - type: docker
@@ -27,8 +28,8 @@ spec:
         - helm repo add ankra-test https://registry.infra.ankra.cloud/chartrepo/test --username 'robot$test' --password Hne33ZWKnRPgTiPV1HREhoVhqHWg0JDD
         - helm repo list
         - helm dependency update helm/
-        - helm package helm/
-        - helm cm-push helm/mcdonald-web-0.1.0.tgz ankra-test
+        - helm package helm/ --version $HELM_CHART_VERSION
+        - helm cm-push helm/mcdonald-web-$HELM_CHART_VERSION.tgz ankra-test
     dry-run:
       script:
         - helm -n $HELM_NAMESPACE list

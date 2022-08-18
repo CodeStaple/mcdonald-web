@@ -2,7 +2,7 @@ apiVersion: v2
 name: mcdonald
 description: A Helm chart for Mc Donalds online web store.
 type: application
-version: 0.1.0 # Chart version
+version: 0.1.0 # Chart version (Controlled through pipeline - .ankra.yaml)
 appVersion: 0.1.0 # Application version - Currently not used.
 
 maintainers:
