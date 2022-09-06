@@ -4,9 +4,20 @@ metadata:
   app: mcdonald
 spec:
   stages:
-    dev:
+    build:
+      - pre-check
       - build
+    test:
       - dry-run
+      - deploy
+      - verify
+      - cleanup
+    dev:
+      - dry-run
+      - deploy
+      - smoke-test
+      - end-to-end
+      - cleanup
 
   global_variables:
     HELM_NAME: mcdonald
@@ -14,10 +25,13 @@ spec:
     HELM_CHART: helm/
     HELM_CHART_VERSION: 0.1.1
 
-  dev:
+  build:
     target:
       match:
         name: dev
+    pre-check:
+      script:
+        - curl https://registry.infra.ankra.cloud
     build:
       build:
         - type: docker
@@ -29,8 +43,45 @@ spec:
         - helm dependency update helm/
         - helm package helm/ --version $HELM_CHART_VERSION
         - helm cm-push mcdonald-$HELM_CHART_VERSION.tgz ankra-test
+
+  test:
+    target:
+      match:
+        name: dev
     dry-run:
       script:
         - helm -n $HELM_NAMESPACE list
         - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run
+    deploy:
+      script:
+        - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace
+    verify:
+      script:
+        - helm -n $HELM_NAMESPACE list
+        - helm -n $HELM_NAMESPACE test $HELM_NAME
+    cleanup:
+      script:
+        - helm -n $HELM_NAMESPACE delete $HELM_NAME
 
+  dev:
+    target:
+      match:
+        name: dev
+    dry-run:
+      script:
+        - helm -n $HELM_NAMESPACE list
+        - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run
+    deploy:
+      script:
+        - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace
+    smoke-test:
+      script:
+        - helm -n $HELM_NAMESPACE list
+        - helm -n $HELM_NAMESPACE test $HELM_NAME
+    end-to-end:
+      script:
+        - helm -n $HELM_NAMESPACE list
+        - helm -n $HELM_NAMESPACE test $HELM_NAME
+    cleanup:
+      script:
+        - helm -n $HELM_NAMESPACE delete $HELM_NAME
