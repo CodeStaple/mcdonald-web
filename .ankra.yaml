@@ -69,7 +69,7 @@ dev:
       - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run
   deploy:
     script:
-      - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --set "podAnnotations\.ankra\.app/app-name"="$APPLICATION_NAME" --create-namespace
+      - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --set podAnnotations.'ankra\.app/app-name'='$APPLICATION_NAME' --create-namespace
   smoke-test:
     script:
       - helm -n $HELM_NAMESPACE list
@@ -92,7 +92,8 @@ test_cluster:
       - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --create-namespace --dry-run
   deploy:
     script:
-      - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --set "podAnnotations\.ankra\.app/app-name"="$APPLICATION_NAME" --set replicaCount=3 --create-namespace
+      - echo $APPLICATION_NAME
+      - helm upgrade --install -n $HELM_NAMESPACE $HELM_NAME $HELM_CHART --set podAnnotations.'ankra\.app/app-name'='$APPLICATION_NAME' --set replicaCount=3 --create-namespace
   smoke-test:
     script:
       - helm -n $HELM_NAMESPACE list
